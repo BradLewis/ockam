@@ -38,6 +38,7 @@ mod subscription;
 mod tcp;
 mod terminal;
 mod trust_context;
+mod uninstall;
 mod upgrade;
 mod util;
 mod vault;
@@ -54,6 +55,7 @@ use crate::subscription::SubscriptionCommand;
 use crate::terminal::{Terminal, TerminalStream};
 use authenticated::AuthenticatedCommand;
 use clap::{ArgAction, Args, Parser, Subcommand, ValueEnum};
+use uninstall::UninstallCommand;
 
 use crate::kafka::outlet::KafkaOutletCommand;
 use colorful::Colorful;
@@ -90,7 +92,7 @@ use tcp::{
 };
 use terminal::OckamColor;
 use trust_context::TrustContextCommand;
-use upgrade::check_if_an_upgrade_is_available;
+use upgrade::{check_if_an_upgrade_is_available, UpgradeCommand};
 use util::{exitcode, exitcode::ExitCode};
 use vault::VaultCommand;
 use version::Version;
@@ -263,6 +265,8 @@ pub enum OckamSubcommand {
     Project(ProjectCommand),
     Admin(AdminCommand),
     Subscription(SubscriptionCommand),
+    Upgrade(UpgradeCommand),
+    Uninstall(UninstallCommand),
 
     Node(Box<NodeCommand>),
     Worker(WorkerCommand),
@@ -383,6 +387,8 @@ impl OckamCommand {
             OckamSubcommand::Project(c) => c.run(options),
             OckamSubcommand::Admin(c) => c.run(options),
             OckamSubcommand::Subscription(c) => c.run(options),
+            OckamSubcommand::Upgrade(c) => c.run(options),
+            OckamSubcommand::Uninstall(c) => c.run(options),
 
             OckamSubcommand::Node(c) => c.run(options),
             OckamSubcommand::Worker(c) => c.run(options),
