@@ -119,19 +119,19 @@ fn restart_nodes(stopped_nodes_names: &[String], opts: &CommandGlobalOpts) -> mi
         let node_state = opts.state.nodes.get(node_name)?;
         let node_setup = node_state.config().setup();
         spawn_node(
-            &opts,
-            &node_name,                                    // The selected node name
-            &node_setup.api_transport()?.addr.to_string(), // The selected node api address
-            None,                                          // No project information available
-            None,                                          // No trusted identities
-            None,                                          // "
-            None,                                          // "
-            None,                                          // Launch config
-            None,                                          // Authority Identity
-            None,                                          // Credential
-            None,                                          // Trust Context
-            None,                                          // Project Name
-            node_setup.disable_file_logging,
+            opts,
+            node_setup.verbose, // Previously user-chosen verbosity level
+            node_name,          // The selected node name
+            &node_setup.default_tcp_listener()?.addr.to_string(), // The selected node api address
+            None,               // No project information available
+            None,               // No trusted identities
+            None,               // "
+            None,               // "
+            None,               // Launch config
+            None,               // Authority Identity
+            None,               // Credential
+            None,               // Trust Context
+            None,               // Project Name
         )?;
         opts.terminal
             .write_line(fmt_ok!("Restarted node {}", node_state.name()))?;
